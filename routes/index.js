@@ -17,10 +17,18 @@ exports.viewNote = function(req, res) {
 // post
 // TODO: user can spoof guid right now
 exports.publishNote = function(req, res) {
-  var note = req.models.Note.findOne({guid: req.body.guid}, function(err, doc) {
+  var guid;
+  if(!req.body.guid) {
+    var str = req.body.guidstring;
+    guid = str.substr(str.indexOf("sh/") + 3, str.indexOf("/", str.indexOf("sh/") + 3) - 3 - str.indexOf("sh/"));
+  } else {
+    guid = req.body.guid;
+  }
+
+  var note = req.models.Note.findOne({guid: guid}, function(err, doc) {
     if(err || !doc) {
       var newNote = new req.models.Note({
-        guid: req.body.guid,
+        guid: guid,
         description: req.body.description,
         tags: req.body.tags.split(","),
         ownerGuid: req.session.uid,

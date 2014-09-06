@@ -1,7 +1,6 @@
 {% extends "index.html" %}
 
 {% block styles %}
-<link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
 <style type="text/css">
   body {
@@ -45,16 +44,11 @@
 {% endblock %}
 
 {% block content %}
-    
-  </head>
-
-  <body>
-
     <div class="container">
 
       <form class="form-publish" role="form" action="/publish" method="POST">
         <h2 class="form-publish-heading">Publish</h2>
-        <input type="text" name="guid" class="form-control" placeholder="GUID" required autofocus>
+        <input type="text" name="guidstring" class="form-control" placeholder="Share URL" required autofocus>
         <br>
         <textarea rows="4" cols="46" name="description" placeholder="Description" required autofocus></textarea>
         <br>
