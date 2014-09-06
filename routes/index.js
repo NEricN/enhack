@@ -1,7 +1,6 @@
 var Evernote = require('evernote').Evernote;
 
 var config = require('../config.json');
-var callbackUrl = "http://localhost:5000/oauth_callback";
 
 // post
 // TODO: user can spoof guid right now
@@ -129,7 +128,7 @@ exports.oauth = function(req, res) {
     sandbox: config.SANDBOX
   });
 
-  client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret, results){
+  client.getRequestToken(req.fullUrl + "/oauth_callback", function(error, oauthToken, oauthTokenSecret, results){
     if(error) {
       req.session.error = JSON.stringify(error);
       res.redirect('/');
