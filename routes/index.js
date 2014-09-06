@@ -14,15 +14,16 @@ exports.index = function(req, res) {
     var noteStore = client.getNoteStore();
     noteStore.listNotebooks(function(err, notebooks){
       req.session.notebooks = notebooks;
+      console.log(notebooks);
       res.render('index.html', {
-        title: "good goy",
+        title: "Welcome",
         logged_in: true,
         logout_url: req.fullUrl + "/clear"
       });
     });
   } else {
     res.render('index.html', {
-      title: "Login pl0x",
+      title: "Welcome",
       logged_in: false,
       login_url: req.fullUrl + "/oauth"
     });
