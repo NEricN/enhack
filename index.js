@@ -24,7 +24,8 @@ var userSchema = new mongoose.Schema({
 	id: String,
 	email: String,
 	username: String,
-	token: String
+	token: String,
+	favorites: [String]
 })
 
 var noteSchema = new mongoose.Schema({
@@ -71,6 +72,7 @@ app.get('/oauth_callback', routes.oauth_callback);
 app.get('/clear', routes.clear);
 
 app.post('/publish', routes.publishNote);
+app.post('/like', routes.favoriteNote);
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'))

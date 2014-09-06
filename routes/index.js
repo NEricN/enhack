@@ -2,6 +2,33 @@ var Evernote = require('evernote').Evernote;
 
 var config = require('../config.json');
 
+
+exports.favoriteNote = function(req, res) {
+  if(req.session.oauthAccessToken) {
+    req.models.User.findOne({id: req.session.uid}, function(err, response) {
+      if(err || !response) {
+        // user doesn't exist
+        res.redirect('/');
+      } else {
+        response.favorites = response.favorites||[];
+        if(response.favorites.indexOf(req.body.guid) < 0) {
+          response.favorites.push(req.body.guid);
+
+          req.models.Note.findOne({id: req.body.guid}, function(err, noteDoc) { 
+            noteDoc.likes += 1;
+            noteDoc.save();
+          })
+          response.save();
+        }
+        res.redirect('/');
+      }
+    })
+    req.models.favorites.
+  } else {
+    res.redirect('/');
+  }
+}
+
 // get
 exports.viewNote = function(req, res) {
   var note = req.models.Note.findOne({guid: req.body.guid}, function(err, doc) {
@@ -9,6 +36,8 @@ exports.viewNote = function(req, res) {
       //uhh note not found
       res.redirect('/');
     } else {
+      doc.views += 1;
+      doc.save();
       res.render('note.html');
     }
   })
@@ -73,6 +102,9 @@ exports.saveNote = function(req, res) {
           sandbox: config.SANDBOX
         });
 
+        doc.downloads += 1;
+        doc.save();
+
         req.models.User.findOne({id: doc.ownerGuid}, function(err, docOwner) {
           var clientOwner = new Evernote.Client({
             token: docOwner.token,
@@ -101,13 +133,6 @@ exports.saveNote = function(req, res) {
             }
           );
         })
-        /*noteStoreOwner.g
-        noteStore.listNotebooks(function(err, notebooks){
-          req.session.notebooks = notebooks;
-          res.render('home.html', {
-            title: "Welcome"
-          });
-        });*/
     }
     });
   }
