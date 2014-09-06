@@ -64,6 +64,7 @@ exports.saveNote = function(req, res) {
     var note = req.models.Note.findOne({guid: req.query.guid}, function(err, doc) {
       if(err || !doc) {
         // dude, note not found
+        res.redirect('/');
       } else {
         // note found! commence elaborate copying mechanism
         var token = req.session.oauthAccessToken;
@@ -88,8 +89,6 @@ exports.saveNote = function(req, res) {
             true,
             true,
             function(err, response) {
-              console.log(response);
-
               delete response.notebookGuid;
               delete response.guid;
 
@@ -110,7 +109,6 @@ exports.saveNote = function(req, res) {
           });
         });*/
     }
-    res.redirect('/');
     });
   }
   else {// not logged in
