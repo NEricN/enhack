@@ -17,14 +17,14 @@ exports.index = function(req, res) {
       res.render('index.html', {
         title: "good goy",
         logged_in: true,
-        logout_url: "http://localhost:5000/clear"
+        logout_url: req.fullUrl + "/clear"
       });
     });
   } else {
     res.render('index.html', {
       title: "Login pl0x",
       logged_in: false,
-      login_url: "http://localhost:5000/oauth"
+      login_url: req.fullUrl + "/oauth"
     });
   }
 };

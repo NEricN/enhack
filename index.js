@@ -25,6 +25,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'nunjucks');
 app.use(function(req,res,next) {
 	res.locals.session = req.session;
+	req.fullUrl = req.protocol + '://' + req.get('host');
 	next();
 })
 app.use(express.cookieParser('secret'));
