@@ -1,22 +1,49 @@
 <!doctype html>
 <html>
   <head>
-    <title>welcome to {{ title }}</title>
+    <title>Welcome to {{ title }}</title>
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
     {% block styles %}
     {% endblock %}
   </head>
   <body>
-    <div>
-    {% if session.oauthAccessToken %}
-      Hello, {{ session.username }}
-      <a href = "{{logout}}"><button>Logout</button></a>
-    {% else %}
-      <a href = "{{login}}"><button>Login</button></a>
-    {% endif %}
-    </div>
 
-    {% block content %}
-    {% endblock %}
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Note Clicker</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Hello, {{ session.username }}</a></li>
+          <li>
+              {% if session.oauthAccessToken %}
+              <a href = "{{logout}}">Logout</a>
+              {% else %}
+              <a href = "{{login}}">Login</a>
+              {% endif %}
+          </li>
+
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <div>
+
+  {% block content %}
+  {% endblock %}
   </body>
 </html>
