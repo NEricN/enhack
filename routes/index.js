@@ -25,7 +25,8 @@ exports.publishNote = function(req, res) {
         tags: req.body.tags.split(","),
         ownerGuid: req.session.uid,
         ownerUsername: req.session.username,
-        ownerToken: req.session.oauthAccessToken
+        ownerToken: req.session.oauthAccessToken,
+        category: req.body.category
       });
 
       newNote.save();
