@@ -3,6 +3,24 @@ var Evernote = require('evernote').Evernote;
 var config = require('../config.json');
 var callbackUrl = "http://localhost:5000/oauth_callback";
 
+// post
+exports.publishNote = function(req, res) {
+
+};
+
+// get
+exports.publishNotePage = function(req, res) {
+
+};
+
+// get
+exports.saveNote = function(req, res) {
+
+};
+
+// 
+
+
 // home page
 exports.index = function(req, res) {
   if(req.session.oauthAccessToken) {
@@ -12,18 +30,13 @@ exports.index = function(req, res) {
       sandbox: config.SANDBOX
     });
     var noteStore = client.getNoteStore();
-    var userStore = client.getUserStore();
-
-    userStore.getUser(function(err, user) {
-      console.log(user);
-      noteStore.listNotebooks(function(err, notebooks){
-        req.session.notebooks = notebooks;
-        console.log(notebooks);
-        res.render('index.html', {
-          title: "Welcome",
-          logged_in: true,
-          logout_url: req.fullUrl + "/clear"
-        });
+    noteStore.listNotebooks(function(err, notebooks){
+      req.session.notebooks = notebooks;
+      console.log(notebooks);
+      res.render('index.html', {
+        title: "Welcome",
+        logged_in: true,
+        logout_url: req.fullUrl + "/clear"
       });
     });
   } else {
@@ -86,7 +99,38 @@ exports.oauth_callback = function(req, res) {
         req.session.edamExpires = results.edam_expires;
         req.session.edamNoteStoreUrl = results.edam_noteStoreUrl;
         req.session.edamWebApiUrlPrefix = results.edam_webApiUrlPrefix;
-        res.redirect('/');
+
+        //create or update user
+
+        var client = new Evernote.Client({
+          token: oauthAccessToken,
+          sandbox: config.SANDBOX
+        });
+
+        var userStore = client.getUserStore();
+        userStore.getUser(function(err, user) {
+          req.models.User.findOne({id: user.id}, function(err, doc) {
+            if(!doc || err) {
+              var newUser = new req.models.User({
+                email: user.email,
+                id: user.id,
+                token: oauthAccessToken,
+                username: user.username
+              });
+
+              newUser.save();
+            } else {
+              doc.token = oauthAccessToken;
+              doc.save();
+            }
+          });
+
+          req.session.username = user.username;
+          req.session.email = user.email;
+          req.session.uid = user.id;
+
+          res.redirect('/');
+        });
       }
     });
 };

@@ -23,12 +23,14 @@ nunjucks.configure('views', {
 var userSchema = new mongoose.Schema({
 	id: String,
 	email: String,
+	username: String,
 	token: String
 })
 
 var noteSchema = new mongoose.Schema({
 	guid: String,
 	ownerGuid: String,
+	ownerUsername: String,
 	tags: {type: [String], index: true },
 	description: String,
 	likes: {type: Number, default: 0},
