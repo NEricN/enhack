@@ -45,8 +45,10 @@ app.set('port', (process.env.PORT || 5000));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'nunjucks');
 app.use(function(req,res,next) {
-	res.locals.session = req.session;
 	req.fullUrl = req.protocol + '://' + req.get('host');
+	res.locals.logout = req.fullUrl + "/clear";
+	res.locals.login = req.fullUrl + "/oauth";
+	res.locals.session = req.session;
 	req.db = mongoose;
 	req.models = {
 		User: User,

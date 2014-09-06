@@ -4,11 +4,16 @@
     <title>welcome to {{ title }}</title>
   </head>
   <body>
-    {% if logged_in %}
-      You're logged in!
-      <a href = "{{logout_url}}"><button>Logout</button></a>
+    <div>
+    {% if session.oauthAccessToken %}
+      Hello, {{ session.username }}
+      <a href = "{{logout}}"><button>Logout</button></a>
     {% else %}
-      <a href = "{{login_url}}"><button>Login</button></a>
+      <a href = "{{login}}"><button>Login</button></a>
     {% endif %}
+    </div>
+
+    {% block content %}
+    {% endblock %}
   </body>
 </html>

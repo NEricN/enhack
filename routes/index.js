@@ -10,6 +10,9 @@ exports.publishNote = function(req, res) {
 
 // get
 exports.publishNotePage = function(req, res) {
+  res.locals.session = req.session;
+
+
 
 };
 
@@ -18,11 +21,9 @@ exports.saveNote = function(req, res) {
 
 };
 
-// 
-
-
 // home page
 exports.index = function(req, res) {
+  res.locals.session = req.session;
   if(req.session.oauthAccessToken) {
     var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
@@ -32,18 +33,13 @@ exports.index = function(req, res) {
     var noteStore = client.getNoteStore();
     noteStore.listNotebooks(function(err, notebooks){
       req.session.notebooks = notebooks;
-      console.log(notebooks);
-      res.render('index.html', {
-        title: "Welcome",
-        logged_in: true,
-        logout_url: req.fullUrl + "/clear"
+      res.render('home.html', {
+        title: "Welcome"
       });
     });
   } else {
-    res.render('index.html', {
-      title: "Welcome",
-      logged_in: false,
-      login_url: req.fullUrl + "/oauth"
+    res.render('home.html', {
+      title: "Welcome"
     });
   }
 };
@@ -109,7 +105,13 @@ exports.oauth_callback = function(req, res) {
 
         var userStore = client.getUserStore();
         userStore.getUser(function(err, user) {
+          if(err) {
+            console.log(err);
+          }
           req.models.User.findOne({id: user.id}, function(err, doc) {
+            if(err) {
+              console.log(err);
+            }
             if(!doc || err) {
               var newUser = new req.models.User({
                 email: user.email,
@@ -120,16 +122,18 @@ exports.oauth_callback = function(req, res) {
 
               newUser.save();
             } else {
+              console.log("Old user found, updating!");
               doc.token = oauthAccessToken;
               doc.save();
             }
+
+
+            req.session.username = user.username;
+            req.session.email = user.email;
+            req.session.uid = user.id;
+
+            res.redirect('/');
           });
-
-          req.session.username = user.username;
-          req.session.email = user.email;
-          req.session.uid = user.id;
-
-          res.redirect('/');
         });
       }
     });
