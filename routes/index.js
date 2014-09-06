@@ -40,7 +40,16 @@ exports.publishNotePage = function(req, res) {
 
 // get
 exports.saveNote = function(req, res) {
-
+  var note = req.models.Note.findOne({guid: req.body.guid}, function(err, doc) {
+    if(err || !doc) {
+      // dude, note not found
+    } else {
+      // uhhh, I guess update owner token
+      newNote.ownerToken = req.session.oauthAccessToken;
+      newNote.save();
+    }
+    res.redirect('/');
+  })
 };
 
 // home page
