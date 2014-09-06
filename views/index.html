@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <head>
+    <title>welcome to {{ title }}</title>
+  </head>
+  <body>
+    {% if logged_in %}
+      You're logged in!
+      <a href = "{{logout_url}}"><button>Logout</button></a>
+    {% else %}
+      <a href = "{{login_url}}"><button>Login</button></a>
+    {% endif %}
+  </body>
+</html>
