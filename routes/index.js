@@ -2,6 +2,18 @@ var Evernote = require('evernote').Evernote;
 
 var config = require('../config.json');
 
+// get
+exports.viewNote = function(req, res) {
+  var note = req.models.Note.findOne({guid: req.body.guid}, function(err, doc) {
+    if(err || !doc) {
+      //uhh note not found
+      res.redirect('/');
+    } else {
+      res.render('note.html');
+    }
+  })
+}
+
 // post
 // TODO: user can spoof guid right now
 exports.publishNote = function(req, res) {
