@@ -12,13 +12,18 @@ exports.index = function(req, res) {
       sandbox: config.SANDBOX
     });
     var noteStore = client.getNoteStore();
-    noteStore.listNotebooks(function(err, notebooks){
-      req.session.notebooks = notebooks;
-      console.log(notebooks);
-      res.render('index.html', {
-        title: "Welcome",
-        logged_in: true,
-        logout_url: req.fullUrl + "/clear"
+    var userStore = client.getUserStore();
+
+    userStore.getUser(function(err, user) {
+      console.log(user);
+      noteStore.listNotebooks(function(err, notebooks){
+        req.session.notebooks = notebooks;
+        console.log(notebooks);
+        res.render('index.html', {
+          title: "Welcome",
+          logged_in: true,
+          logout_url: req.fullUrl + "/clear"
+        });
       });
     });
   } else {

@@ -20,12 +20,36 @@ nunjucks.configure('views', {
 	express: app
 })
 
+var userSchema = new mongoose.Schema({
+	id: String,
+	email: String,
+	token: String
+})
+
+var noteSchema = new mongoose.Schema({
+	guid: String,
+	ownerGuid: String,
+	tags: {type: [String], index: true },
+	description: String,
+	likes: {type: Number, default: 0},
+	downloads: {type: Number, default: 0},
+	views: {type: Number, default: 0}
+})
+
+var User = mongoose.model("User", userSchema);
+var Note = mongoose.model("Note", noteSchema);
+
 app.set('port', (process.env.PORT || 5000));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'nunjucks');
 app.use(function(req,res,next) {
 	res.locals.session = req.session;
 	req.fullUrl = req.protocol + '://' + req.get('host');
+	req.db = mongoose;
+	req.models = {
+		User: User,
+		Note: Note
+	}
 	next();
 })
 app.use(express.cookieParser('secret'));
