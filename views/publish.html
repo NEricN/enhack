@@ -1,1 +1,10 @@
 {% extends "index.html" %}
+
+{% block content %}
+	<form action="/publish" method="POST">
+	  GUID: <input type="text" name="guid" /><br>
+	  Description: <textarea name="description"></textarea><br>
+	  Tags: <textarea name="tags"></textarea><br>
+	  <input type="submit" value="Submit" />
+	</form>
+{% endblock %}

@@ -4,16 +4,38 @@ var config = require('../config.json');
 var callbackUrl = "http://localhost:5000/oauth_callback";
 
 // post
+// TODO: user can spoof guid right now
 exports.publishNote = function(req, res) {
+  var note = req.models.Note.findOne({guid: req.body.guid}, function(err, doc) {
+    if(err || !doc) {
+      var newNote = new req.models.Note({
+        guid: req.body.guid,
+        description: req.body.description,
+        tags: req.body.tags.split(","),
+        ownerGuid: req.session.uid,
+        ownerUsername: req.session.username,
+        ownerToken: req.session.oauthAccessToken
+      });
 
+      newNote.save();
+    } else {
+      // uhhh, I guess update owner token
+      newNote.ownerToken = req.session.oauthAccessToken;
+      newNote.save();
+    }
+    res.redirect('/');
+  })
 };
 
 // get
 exports.publishNotePage = function(req, res) {
   res.locals.session = req.session;
 
-
-
+  if(req.session.oauthAccessToken)
+    return res.render('publish.html', {
+      title: "Publish a Note"
+    })
+  else res.redirect('/');
 };
 
 // get
@@ -122,7 +144,6 @@ exports.oauth_callback = function(req, res) {
 
               newUser.save();
             } else {
-              console.log("Old user found, updating!");
               doc.token = oauthAccessToken;
               doc.save();
             }
