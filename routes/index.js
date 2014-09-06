@@ -40,16 +40,62 @@ exports.publishNotePage = function(req, res) {
 
 // get
 exports.saveNote = function(req, res) {
-  var note = req.models.Note.findOne({guid: req.body.guid}, function(err, doc) {
-    if(err || !doc) {
-      // dude, note not found
-    } else {
-      // uhhh, I guess update owner token
-      newNote.ownerToken = req.session.oauthAccessToken;
-      newNote.save();
+  if(req.session.oauthAccessToken) {
+    var note = req.models.Note.findOne({guid: req.query.guid}, function(err, doc) {
+      if(err || !doc) {
+        // dude, note not found
+      } else {
+        // note found! commence elaborate copying mechanism
+        var token = req.session.oauthAccessToken;
+        var clientUser = new Evernote.Client({
+          token: token,
+          sandbox: config.SANDBOX
+        });
+
+        req.models.User.findOne({id: doc.ownerGuid}, function(err, docOwner) {
+          var clientOwner = new Evernote.Client({
+            token: docOwner.token,
+            sandbox: config.SANDBOX
+          })
+          var noteStoreUser = clientUser.getNoteStore();
+          var noteStoreOwner = clientOwner.getNoteStore();
+
+          noteStoreOwner.getNote(
+            docOwner.token,
+            req.query.guid,
+            true,
+            true,
+            true,
+            true,
+            function(err, response) {
+              console.log(response);
+
+              delete response.notebookGuid;
+              delete response.guid;
+
+              noteStoreUser.createNote(
+                req.session.oauthAccessToken,
+                response,
+                function(err, response) {
+                  res.redirect('/');
+              });
+            }
+          );
+        })
+        /*noteStoreOwner.g
+        noteStore.listNotebooks(function(err, notebooks){
+          req.session.notebooks = notebooks;
+          res.render('home.html', {
+            title: "Welcome"
+          });
+        });*/
     }
     res.redirect('/');
-  })
+    });
+  }
+  else {// not logged in
+    res.redirect('/');
+  }
 };
 
 // home page

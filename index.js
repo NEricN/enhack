@@ -29,7 +29,6 @@ var userSchema = new mongoose.Schema({
 
 var noteSchema = new mongoose.Schema({
 	guid: String,
-	ownerToken: String,
 	ownerGuid: String,
 	ownerUsername: String,
 	tags: {type: [String], index: true },
@@ -66,6 +65,7 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/', routes.index);
 app.get('/publish', routes.publishNotePage);
+app.get('/save', routes.saveNote);
 app.get('/oauth', routes.oauth);
 app.get('/oauth_callback', routes.oauth_callback);
 app.get('/clear', routes.clear);
