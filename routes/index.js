@@ -30,14 +30,15 @@ exports.favoriteNote = function(req, res) {
 
 // get
 exports.viewNote = function(req, res) {
-  var note = req.models.Note.findOne({guid: req.body.guid}, function(err, doc) {
+  var note = req.models.Note.findOne({guid: req.query.guid}, function(err, doc) {
     if(err || !doc) {
-      //uhh note not found
       res.redirect('/');
     } else {
       doc.views += 1;
       doc.save();
-      res.render('note.html');
+      res.render('note.html', {
+        note: doc
+      });
     }
   })
 }
