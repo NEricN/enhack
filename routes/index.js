@@ -1,5 +1,6 @@
 var Evernote = require('evernote').Evernote;
 var request = require('request');
+var si = require('search-index');
 
 var config = require('../config.json');
 
@@ -63,8 +64,6 @@ exports.publishNote = function(req, res) {
     guid = req.body.guid;
   }
 
-
-
   var note = req.models.Note.findOne({guid: guid}, function(err, doc) {
     if(err || !doc) {
       // getting image
@@ -91,6 +90,14 @@ exports.publishNote = function(req, res) {
           newNote.thumbnail.contentType = 'image/png';
 
           newNote.save();
+
+          si.add({
+            name: newNote.name,
+            description: newNote.description,
+            tags: newNote.tags,
+            category: newNote.category
+          }, newNote._id, ['category', 'tags', 'name', 'description'])
+
           res.redirect('/');
         });
     } else {
@@ -168,22 +175,11 @@ exports.saveNote = function(req, res) {
 exports.index = function(req, res) {
   res.locals.session = req.session;
   if(req.session.oauthAccessToken) {
-    /*var token = req.session.oauthAccessToken;
-    var client = new Evernote.Client({
-      token: token,
-      sandbox: config.SANDBOX
-    });
-    var noteStore = client.getNoteStore();
-    noteStore.listNotebooks(function(err, notebooks){
-      req.session.notebooks = notebooks;
-      res.render('home.html', {
-        title: "Welcome"
-      });
-    });*/
-
     var base = req.models.Note.find;
 
-    if(req.query.sortby) {
+    if(req.query.textsearch) {
+      console.log(req.query.textsearch);
+    } else if(req.query.sortby) {
       req.models.Note.find().sort("-"+ req.query.sortby).exec(function(err, doc) {
           res.render('home.html', {
           title: "Welcome",
