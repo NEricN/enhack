@@ -39,8 +39,6 @@ exports.viewNote = function(req, res) {
           doc.views += 1;
           doc.save();
 
-          doc.thumbnail.data = new Buffer(doc.thumbnail.data.toString('binary'), 'binary').toString('base64');
-
           res.render('note.html', {
             note: doc,
             favorite: docUser.favorites&&(docUser.favorites.indexOf(req.query.guid) >= 0)
@@ -91,7 +89,7 @@ exports.publishNote = function(req, res) {
             shard: shard
           });
 
-          newNote.thumbnail.data = body;
+          newNote.thumbnail.data = new Buffer(body.toString('binary'), 'binary').toString('base64');;
           newNote.thumbnail.contentType = 'image/png';
 
           newNote.save();
@@ -171,7 +169,7 @@ exports.saveNote = function(req, res) {
 exports.index = function(req, res) {
   res.locals.session = req.session;
   if(req.session.oauthAccessToken) {
-    var token = req.session.oauthAccessToken;
+    /*var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
       token: token,
       sandbox: config.SANDBOX
@@ -182,9 +180,12 @@ exports.index = function(req, res) {
       res.render('home.html', {
         title: "Welcome"
       });
-    });
-  } else {
+    });*/
     res.render('home.html', {
+      title: "Welcome"
+    })
+  } else {
+    res.render('index.html', {
       title: "Welcome"
     });
   }
