@@ -64,102 +64,19 @@
 						<div class="isotope-portfolio isotope" style="position: relative; height: 100%;">
 
 							<!-- Item 1 -->
-
+							{% for note in noteArray %}
 							<div class="item isotope-item" >
 
 								<div class="item-slider img">
-									<a class="fancybox img" href="images/portfolio/newyork_2010.jpg"></a>
+									<a class="fancybox img" href="/note?guid={{note.guid}}"></a>
 								</div>
 
-								<img src="images/portfolio/newyork_2010_thumb.jpg" alt="">
+								<img src="data:{{note.thumbnail.contentType}};base64,{{note.thumbnail.data}}" height="150" width="150" />
 
-								<div class="item-name" style="bottom: 0px;">New York</div>
-
-							</div>
-
-							<!-- Item 2 -->
-
-							<div class="item isotope-item" >
-
-								<div class="item-slider img" >
-									<a class="fancybox img" href="images/portfolio/nyc_taxi.jpg"></a>
-								</div>
-
-								<img src="images/portfolio/nyc_taxi_thumb.jpg" alt="">
-
-								<div class="item-name" style="bottom: 0px;">Yellow Cab</div>
+								<div class="item-name" style="bottom: 0px;">{{note.name}}</div>
 
 							</div>
-
-							<!-- Item 3 -->
-
-							<div class="item isotope-item" >
-
-								<div class="item-slider img" >
-									<a class="fancybox img" href="images/portfolio/nyc_streets.jpg"></a>
-								</div>
-
-								<img src="images/portfolio/nyc_streets_thumb.jpg" alt="">
-
-								<div class="item-name" style="bottom: 0px;">Streets</div>
-
-							</div>
-
-							<!-- Item 4 -->
-
-							<div class="item isotope-item" >
-
-								<div class="item-slider img">
-									<a class="fancybox img" href="images/portfolio/linux_print.jpg"></a>
-								</div>
-
-								<img src="images/portfolio/linux_print_thumb.jpg" alt="">
-
-								<div class="item-name"style="bottom: 0px;">Linux</div>
-
-							</div>
-
-							<!-- Item 5 -->
-
-							<div class="item isotope-item" >
-
-								<div class="item-slider img" >
-									<a class="fancybox img" href="images/portfolio/nyc_timesquare.jpg"></a>
-								</div>
-
-								<img src="images/portfolio/nyc_timesquare_thumb.jpg" alt="">
-
-								<div class="item-name" style="bottom: 0px;">Timesquare</div>
-
-							</div>
-
-							<!-- Item 6 -->
-
-							<div class="item isotope-item" >
-
-								<div class="item-slider img" >
-									<a class="fancybox img" href="images/portfolio/nyc_traffic_lights.jpg"></a>
-								</div>
-
-								<img src="images/portfolio/nyc_traffic_lights_thumb.jpg" alt="">
-
-								<div class="item-name" style="bottom: 0px;">Streets</div>
-
-							</div>
-
-							<!-- Item 7 -->
-
-							<div class="item isotope-item" >
-
-								<div class="item-slider img">
-									<a class="fancybox img" href="images/portfolio/wallstreet_2010.jpg"></a>
-								</div>
-
-								<img src="images/portfolio/wallstreet_2010_thumb.jpg" alt="">
-
-								<div class="item-name" style="bottom: 0px;">Streets</div>
-
-							</div>
+							{% endfor %}
 
 						<div class="clear"></div>
 

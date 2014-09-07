@@ -181,8 +181,11 @@ exports.index = function(req, res) {
         title: "Welcome"
       });
     });*/
-    res.render('home.html', {
-      title: "Welcome"
+    req.models.Note.find(function(err, doc) {
+        res.render('home.html', {
+        title: "Welcome",
+        noteArray: doc
+      })
     })
   } else {
     res.render('index.html', {
