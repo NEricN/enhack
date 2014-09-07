@@ -60,7 +60,24 @@
 					<div class="g_3">
 
 						<h1 class="heading" style="float:left">Welcome, {{session.username}}</h1>
-						<a href="/publish" title="Publish your note!" style="float:right; color:#69aa35;"> PUBLISH<img src ="images/evernote_32.png" width = 50px height = 50px  title="Publish your note" ></img> </a>
+						<table style="float:right; margin:0">
+						
+							<tr>
+								<th>
+									<a href="" title="Logout" style="color:#eee;"> LOGOUT </a>
+								</th>
+								<td rowspan="2"><img src="images/evernote_32.png" width="50px" height="50px"></td>
+							</tr>
+							<tr>
+								<th>
+									<a href="/publish" title="Publish your note!" style="color:#69aa35; font-size:16px;"> PUBLISH </a>
+								</th>
+							</tr>
+						
+						
+						</table>
+						
+						
 						<div class="clear"></div>
 						<ul class="isotope-filter">
 		
