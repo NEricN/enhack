@@ -8,7 +8,7 @@ html {
 }
 
 body {
-	background: url('../images/backgrounds/bg_1.png');
+	background: #000;
 
 	font: 0.85em/1.6em 'Ubuntu', sans-serif;
 	color: #fff;
