@@ -31,6 +31,12 @@
   .form-publish .form-control:focus {
     z-index: 2;
   }
+
+  .container {
+    background-color: #1a1a1a;
+    width: 400px;
+  }
+
   .container textarea { 
     width: 250px;
     height: 200px;
@@ -98,11 +104,17 @@
     color: #fff;
     /*position: center;*/
   }
+
+  .well{
+    background: #1a1a1a;
+    vertical-align:middle;
+  }
 </style>
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+  <div class="container">
+    <!-- <div class="well well-lg" > -->
       <form class="form-publish" role="form" action="/publish" method="POST">
         <h2 class="form-publish-heading">Publish</h2>
         <input type="text" name="guidstring" class="form-control" placeholder="Share URL" required autofocus>
@@ -124,5 +136,6 @@
       <input class="btn btn-lg btn-green btn-block" type="submit" value="Submit" />
       </form>
 
-    </div>
+    <!-- </div> -->
+  </div>
 {% endblock %}
