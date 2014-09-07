@@ -69,9 +69,9 @@ div, header, nav, aside, article, section, footer, input, textarea, table, ul, l
 	position: relative;
 	top: 0;
 	
-	margin: 0 0 0 300px;
+	margin: 0 0 0 100px;
 	padding: 0 0 10px 0;
-	width: 600px;
+	width: 1150px;
 
 	z-index: 2;
 }
