@@ -70,6 +70,7 @@ exports.publishNote = function(req, res) {
           body = new Buffer(body, 'binary');
 
           var newNote = new req.models.Note({
+            name: req.body.name,
             guid: guid,
             description: req.body.description,
             tags: req.body.tags.split(","),
