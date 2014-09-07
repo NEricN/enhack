@@ -29,6 +29,7 @@ var userSchema = new mongoose.Schema({
 })
 
 var noteSchema = new mongoose.Schema({
+	name: String,
 	guid: String,
 	ownerGuid: String,
 	ownerUsername: String,
