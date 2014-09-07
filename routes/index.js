@@ -56,6 +56,11 @@ exports.viewNote = function(req, res) {
 // TODO: user can spoof guid right now
 exports.publishNote = function(req, res) {
   var guid, shard;
+
+  if(!req.body.guidstring) {
+    res.redirect('/publish');
+  }
+
   if(!req.body.guid) {
     var str = req.body.guidstring;
     shard = str.substr(str.indexOf("shard/") + 6, str.indexOf("/", str.indexOf("shard/") + 6) - 6 - str.indexOf("shard/"));
