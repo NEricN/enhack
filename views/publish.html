@@ -4,7 +4,7 @@
 <script src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
 <style type="text/css">
   body {
-    background-color: #eee;
+    background-color: #000;
   }
 
   .form-publish {
@@ -31,13 +31,73 @@
   .form-publish .form-control:focus {
     z-index: 2;
   }
-  textarea { 
-    border-radius:5px; 
-    border:1px solid #c0c0c0;
-    -moz-border-radius:5px; 
-    -webkit-border-radius:5px;
+  .container textarea { 
+    width: 250px;
+    height: 200px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 2px;
+    color: #fff;
+    font-family: 'Exo', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 4px;
+  }
+  .container input[type=submit]{
+    width: 260px;
+    height: 35px;
+    background: #69aa35;
+    border: 1px solid #457023;
+    cursor: pointer;
+    border-radius: 2px;
+    color: #FFF;
+    font-family: 'Exo', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 6px;
+    margin-top: 10px;
   }
 
+  .container input[type=submit]:hover{
+    opacity: 0.8;
+  }
+
+  .container input[type=submit]:active{
+    opacity: 0.6;
+  } 
+
+  .container input[type=text]{
+    width: 250px;
+    height: 30px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 2px;
+    color: #fff;
+    font-family: 'Exo', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 4px;
+  }
+  .container select{
+    width: 250px;
+    height: 30px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 2px;
+    color: #fff;
+    font-family: 'Exo', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 4px;
+  }
+  .container select option{
+    color: #646464;
+  }
+
+  .container h2{
+    color: #fff;
+    /*position: center;*/
+  }
 </style>
 {% endblock %}
 
@@ -49,7 +109,7 @@
         <br>
         <input type="text" name="name" class="form-control" placeholder="Name" required autofocus>
         <br>
-        <textarea rows="4" cols="46" name="description" placeholder="Description" required autofocus></textarea>
+        <textarea rows="4" cols="46" class="form-control" name="description" placeholder="Description" required autofocus></textarea>
         <br>
         <input type="text" name="tags" class="form-control" placeholder="tags" required autofocus>
         <br>
@@ -61,7 +121,7 @@
           <option value="Other">Other</option>
         </select>
         <br>
-        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" />
+      <input class="btn btn-lg btn-green btn-block" type="submit" value="Submit" />
       </form>
 
     </div>
