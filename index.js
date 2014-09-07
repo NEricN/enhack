@@ -72,6 +72,7 @@ app.get('/save', routes.saveNote);
 app.get('/oauth', routes.oauth);
 app.get('/oauth_callback', routes.oauth_callback);
 app.get('/clear', routes.clear);
+app.get('/note', routes.viewNote);
 
 app.post('/publish', routes.publishNote);
 app.post('/like', routes.favoriteNote);
