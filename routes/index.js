@@ -39,6 +39,8 @@ exports.viewNote = function(req, res) {
           doc.views += 1;
           doc.save();
 
+          doc.thumbnail.data = new Buffer(doc.thumbnail.data.toString('binary'), 'binary').toString('base64');
+
           res.render('note.html', {
             note: doc,
             favorite: docUser.favorites&&(docUser.favorites.indexOf(req.query.guid) >= 0)
