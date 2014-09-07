@@ -67,12 +67,10 @@ exports.publishNote = function(req, res) {
 
   var note = req.models.Note.findOne({guid: guid}, function(err, doc) {
     if(err || !doc) {
-      
-
       // getting image
       request.post("http://sandbox.evernote.com/shard/" + shard + "/thm/note/" + guid + ".png",
         {encoding: null, form: {auth: req.session.oauthAccessToken, size: 150}},
-        function(err,res,body) {
+        function(err,res2,body) {
 
           console.log(body);
           body = new Buffer(body);
