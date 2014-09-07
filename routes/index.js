@@ -71,7 +71,7 @@ exports.publishNote = function(req, res) {
 
       // getting image
       request.post("http://sandbox.evernote.com/shard/" + shard + "/thm/note/" + guid + ".png",
-        {form: {auth: req.session.oauthAccessToken, size: 150}},
+        {encoding: null, form: {auth: req.session.oauthAccessToken, size: 150}},
         function(err,res,body) {
 
           console.log(body);
