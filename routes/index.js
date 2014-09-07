@@ -14,7 +14,7 @@ exports.favoriteNote = function(req, res) {
         if(response.favorites.indexOf(req.body.guid) < 0) {
           response.favorites.push(req.body.guid);
 
-          req.models.Note.findOne({id: req.body.guid}, function(err, noteDoc) { 
+          req.models.Note.findOne({guid: req.body.guid}, function(err, noteDoc) { 
             noteDoc.likes += 1;
             noteDoc.save();
           });
@@ -30,17 +30,28 @@ exports.favoriteNote = function(req, res) {
 
 // get
 exports.viewNote = function(req, res) {
-  var note = req.models.Note.findOne({guid: req.query.guid}, function(err, doc) {
-    if(err || !doc) {
-      res.redirect('/');
-    } else {
-      doc.views += 1;
-      doc.save();
-      res.render('note.html', {
-        note: doc
-      });
-    }
-  })
+  if(req.session.oauthAccessToken) {
+    var user = req.models.User.findOne({id: req.session.uid}, function(err, docUser) {
+      var note = req.models.Note.findOne({guid: req.query.guid}, function(err, doc) {
+        if(err || !doc) {
+          res.redirect('/');
+        } else {
+          doc.views += 1;
+          doc.save();
+
+          console.log(req.query.guid);
+          console.log(docUser.favorites);
+
+          res.render('note.html', {
+            note: doc,
+            favorite: docUser.favorites&&(req.query.guid in docUser.favorites)
+          });
+        }
+      })
+    })
+  } else {
+    res.redirect('/');
+  }
 }
 
 // post
@@ -67,7 +78,7 @@ exports.publishNote = function(req, res) {
         function(err,res,body) {
 
           console.log(body);
-          body = new Buffer(body, 'binary');
+          body = new Buffer(body);
 
           var newNote = new req.models.Note({
             name: req.body.name,

@@ -28,6 +28,28 @@
 	<script type="text/javascript" src="/note_files/additional-scripts.js"></script>
 	<script type="text/javascript" src="/note_files/custom.js"></script>
 
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#download").click(function() {
+				$.ajax({
+					url: "/save?guid=" + "{{note.guid}}"
+				})
+			})
+
+			$("#like").click(function() {
+				$("#like").addClass("active");
+
+				$.ajax({
+					type: "POST",
+					url: "/like",
+					data: {
+						guid: "{{note.guid}}"
+					}
+				})
+			})
+		});
+	</script>
+
 <script type="text/javascript" charset="UTF-8" src="/note_files/{common,util,stats}.js"></script><script type="text/javascript" charset="UTF-8" src="/note_files/{common,util,stats}(1).js"></script><script type="text/javascript" charset="UTF-8" src="/note_files/{common,util,stats}(2).js"></script></head>
 <body>
 
@@ -53,24 +75,6 @@
 
 		<section class="content">
 
-		<ul class="social-media">
-<li>
-  <a>
-  <input name="like" type="submit" value="like">
-  </a>
-  </li>
-  
-  <li><a class="no-animation" href="file:///Users/zli/Documents/tech/webstuff/myhomepage/ftmp_1/index.html#">
-  </a></li>
-			<li><a class="no-animation" href="file:///Users/zli/Documents/tech/webstuff/myhomepage/ftmp_1/index.html#"><i class="icon-facebook-sign"></i>
-  </a></li>
-
-			<li><a class="no-animation" href="file:///Users/zli/Documents/tech/webstuff/myhomepage/ftmp_1/index.html#"><i class="icon-twitter-sign"></i></a></li>
-			
-			<li><a class="no-animation" href="file:///Users/zli/Documents/tech/webstuff/myhomepage/ftmp_1/index.html#"><i class="icon-google-plus-sign"></i></a></li>
-
-		</ul>
-
 		<ul class="content-list">
 
 			<li class="list-home" style="overflow: hidden; display: block;"> <!-- home start -->
@@ -88,8 +92,7 @@
 
 					
 
-					<p class="note-content">
-					 <br>The content of the note will be displayed here!</p>
+					<img src="data:{{note.thumbnail.contentType}};base64,{{note.thumbnail.data}}" />
 
 				</div>
 
@@ -116,9 +119,9 @@
 
 				<div class="g_15 g_620_padding">
 
-					<h3 class="heading"><span>+</span>Ratings<span><i class="icon-star"></i></span></h3>
-
-						<table class="ratings">
+					<h3 class="heading"><span>+</span>Description<span><i class="icon-star"></i></span></h3>
+						{{note.description}}
+						<!--<table class="ratings">
 
 							<tbody><tr>
 								<td class="desc">Usefulness</td><td><div class="outer-bar"><div class="inner-bar" style="width: 100%; display: block; overflow: hidden;"></div></div></td>
@@ -134,8 +137,7 @@
 
 							
 
-						</tbody></table>
-
+						</tbody></table>-->
 					
 
 						
@@ -147,17 +149,6 @@
 			</li>
 
 <li class="list-contact" style="overflow: hidden; display: block"> <!-- contact start -->
-
-				
-
-				<div class="column">
-<p><input name="submit" type="submit" value="Save to my Evernote!"></p>
-					
-
-					
-					
-				</div>	
-
 				
 
 			</li><!-- home end -->
@@ -170,11 +161,11 @@
 
 			<ul class="navigation">
 
-				<li class="home active"><i class="icon-home"></i><p>Home</p></li>
+				<li class="meh"><i class="icon-home"></i><p>Return</p></li>
 
-				<li class="download" id="download"><i class="icon-download"></i><p>download</p></li>
+				<li class="download" id="download"><i class="icon-download" id="download"></i><p>Copy to Evernote</p></li>
 
-				<li id="rate" class="rate"><i class="icon-star"></i><p>rate</p></li>
+				<li class="rate {% if favorite %} active {% endif %}" id="like"><i class="icon-star"></i><p>Like</p></li>
 
 			</ul>
 
