@@ -1,7 +1,7 @@
 var Evernote = require('evernote').Evernote;
+var request = require('request');
 
 var config = require('../config.json');
-
 
 exports.favoriteNote = function(req, res) {
   if(req.session.oauthAccessToken) {
@@ -17,17 +17,16 @@ exports.favoriteNote = function(req, res) {
           req.models.Note.findOne({id: req.body.guid}, function(err, noteDoc) { 
             noteDoc.likes += 1;
             noteDoc.save();
-          })
+          });
           response.save();
         }
         res.redirect('/');
       }
-    })
-    req.models.favorites.
+    });
   } else {
     res.redirect('/');
   }
-}
+};
 
 // get
 exports.viewNote = function(req, res) {
@@ -46,31 +45,46 @@ exports.viewNote = function(req, res) {
 // post
 // TODO: user can spoof guid right now
 exports.publishNote = function(req, res) {
-  var guid;
+  var guid, shard;
   if(!req.body.guid) {
     var str = req.body.guidstring;
+    shard = str.substr(str.indexOf("shard/") + 6, str.indexOf("/", str.indexOf("shard/") + 6) - 6 - str.indexOf("shard/"));
     guid = str.substr(str.indexOf("sh/") + 3, str.indexOf("/", str.indexOf("sh/") + 3) - 3 - str.indexOf("sh/"));
   } else {
     guid = req.body.guid;
   }
 
+
+
   var note = req.models.Note.findOne({guid: guid}, function(err, doc) {
     if(err || !doc) {
-      var newNote = new req.models.Note({
-        guid: guid,
-        description: req.body.description,
-        tags: req.body.tags.split(","),
-        ownerGuid: req.session.uid,
-        ownerUsername: req.session.username,
-        ownerToken: req.session.oauthAccessToken,
-        category: req.body.category
-      });
+      
 
-      newNote.save();
+      // getting image
+      request.post("http://sandbox.evernote.com/shard/" + shard + "/thm/note/" + guid + ".png",
+        {form: {auth: req.session.oauthAccessToken, size: 150}},
+        function(err,res,body) {
+
+          console.log(body);
+          body = new Buffer(body, 'binary');
+
+          var newNote = new req.models.Note({
+            guid: guid,
+            description: req.body.description,
+            tags: req.body.tags.split(","),
+            ownerGuid: req.session.uid,
+            ownerUsername: req.session.username,
+            ownerToken: req.session.oauthAccessToken,
+            category: req.body.category,
+            shard: shard
+          });
+
+          newNote.thumbnail.data = body;
+          newNote.thumbnail.contentType = 'image/png';
+
+          newNote.save();
+        });
     } else {
-      // uhhh, I guess update owner token
-      newNote.ownerToken = req.session.oauthAccessToken;
-      newNote.save();
     }
     res.redirect('/');
   })

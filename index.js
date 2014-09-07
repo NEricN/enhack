@@ -37,7 +37,9 @@ var noteSchema = new mongoose.Schema({
 	likes: {type: Number, default: 0},
 	downloads: {type: Number, default: 0},
 	views: {type: Number, default: 0},
-	category: {type: String, index: true}
+	category: {type: String, index: true},
+	shard: String,
+	thumbnail: { data: Buffer, contentType: String }
 })
 
 var User = mongoose.model("User", userSchema);
