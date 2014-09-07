@@ -180,12 +180,24 @@ exports.index = function(req, res) {
         title: "Welcome"
       });
     });*/
-    req.models.Note.find(function(err, doc) {
-        res.render('home.html', {
-        title: "Welcome",
-        noteArray: doc
+
+    var base = req.models.Note.find;
+
+    if(req.query.sortby) {
+      req.models.Note.find().sort("-"+ req.query.sortby).exec(function(err, doc) {
+          res.render('home.html', {
+          title: "Welcome",
+          noteArray: doc
+        })
+      });
+    } else {
+      req.models.Note.find(function(err, doc) {
+          res.render('home.html', {
+          title: "Welcome",
+          noteArray: doc
+        })
       })
-    })
+    }    
   } else {
     res.render('login.html', {
       title: "Welcome"
