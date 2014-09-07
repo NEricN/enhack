@@ -178,7 +178,27 @@ exports.index = function(req, res) {
     var base = req.models.Note.find;
 
     if(req.query.textsearch) {
-      console.log(req.query.textsearch);
+      si.search({
+        "query": {
+          "*": [req.query.textsearch]
+        },
+        "weight": {
+          "name": [
+            "10"
+          ],
+          "description": [
+            "5"
+          ]
+        }
+      }, function(msg) {
+        req.models.Note.find(function(err, doc) {
+            res.render('home.html', {
+            title: "Welcome",
+            noteArray: doc,
+            text: req.query.textsearch
+          })
+        })
+      });
     } else if(req.query.sortby) {
       req.models.Note.find().sort("-"+ req.query.sortby).exec(function(err, doc) {
           res.render('home.html', {
