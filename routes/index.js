@@ -1,6 +1,6 @@
 var Evernote = require('evernote').Evernote;
 var request = require('request');
-var si = require('search-index');
+//var si = require('search-index');
 
 var config = require('../config.json');
 
@@ -178,7 +178,7 @@ exports.index = function(req, res) {
     var base = req.models.Note.find;
 
     if(req.query.textsearch) {
-      si.search({
+      /*si.search({
         "query": {
           "*": [req.query.textsearch]
         },
@@ -198,7 +198,14 @@ exports.index = function(req, res) {
             text: req.query.textsearch
           })
         })
-      });
+      });*/
+        req.models.Note.find(function(err, doc) {
+            res.render('home.html', {
+            title: "Welcome",
+            noteArray: doc,
+            text: req.query.textsearch
+          })
+        })
     } else if(req.query.sortby) {
       req.models.Note.find().sort("-"+ req.query.sortby).exec(function(err, doc) {
           res.render('home.html', {
