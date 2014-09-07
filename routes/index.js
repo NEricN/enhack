@@ -91,12 +91,12 @@ exports.publishNote = function(req, res) {
 
           newNote.save();
 
-          si.add({
+          /*si.add({
             name: newNote.name,
             description: newNote.description,
             tags: newNote.tags,
             category: newNote.category
-          }, newNote._id, ['category', 'tags', 'name', 'description'])
+          }, newNote._id, ['category', 'tags', 'name', 'description'])*/
 
           res.redirect('/');
         });
