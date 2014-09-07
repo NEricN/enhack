@@ -745,7 +745,7 @@ a {
 }
 
 a:not(.no-animation):hover {
-	color: rgb(65,172,255);
+	color: #69aa35;
 
 	-webkit-transition: color .4s;
 	-moz-transition: color .4s;
