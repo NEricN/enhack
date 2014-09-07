@@ -93,10 +93,11 @@ exports.publishNote = function(req, res) {
           newNote.thumbnail.contentType = 'image/png';
 
           newNote.save();
+          res.redirect('/');
         });
     } else {
+      res.redirect('/');
     }
-    res.redirect('/');
   })
 };
 
