@@ -39,12 +39,9 @@ exports.viewNote = function(req, res) {
           doc.views += 1;
           doc.save();
 
-          console.log(req.query.guid);
-          console.log(docUser.favorites);
-
           res.render('note.html', {
             note: doc,
-            favorite: docUser.favorites&&(req.query.guid in docUser.favorites)
+            favorite: docUser.favorites&&(docUser.favorites.indexOf(req.query.guid) >= 0)
           });
         }
       })
