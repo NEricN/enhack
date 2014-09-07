@@ -187,7 +187,7 @@ exports.index = function(req, res) {
       })
     })
   } else {
-    res.render('index.html', {
+    res.render('login.html', {
       title: "Welcome"
     });
   }
