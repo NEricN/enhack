@@ -67,12 +67,10 @@ exports.publishNote = function(req, res) {
 
   var note = req.models.Note.findOne({guid: guid}, function(err, doc) {
     if(err || !doc) {
-      
-
       // getting image
       request.post("http://sandbox.evernote.com/shard/" + shard + "/thm/note/" + guid + ".png",
-        {form: {auth: req.session.oauthAccessToken, size: 150}},
-        function(err,res,body) {
+        {encoding: null, form: {auth: req.session.oauthAccessToken, size: 150}},
+        function(err,res2,body) {
 
           console.log(body);
           body = new Buffer(body);
@@ -89,14 +87,15 @@ exports.publishNote = function(req, res) {
             shard: shard
           });
 
-          newNote.thumbnail.data = body;
+          newNote.thumbnail.data = new Buffer(body.toString('binary'), 'binary').toString('base64');;
           newNote.thumbnail.contentType = 'image/png';
 
           newNote.save();
+          res.redirect('/');
         });
     } else {
+      res.redirect('/');
     }
-    res.redirect('/');
   })
 };
 
@@ -169,7 +168,7 @@ exports.saveNote = function(req, res) {
 exports.index = function(req, res) {
   res.locals.session = req.session;
   if(req.session.oauthAccessToken) {
-    var token = req.session.oauthAccessToken;
+    /*var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
       token: token,
       sandbox: config.SANDBOX
@@ -180,9 +179,15 @@ exports.index = function(req, res) {
       res.render('home.html', {
         title: "Welcome"
       });
-    });
+    });*/
+    req.models.Note.find(function(err, doc) {
+        res.render('home.html', {
+        title: "Welcome",
+        noteArray: doc
+      })
+    })
   } else {
-    res.render('home.html', {
+    res.render('index.html', {
       title: "Welcome"
     });
   }
